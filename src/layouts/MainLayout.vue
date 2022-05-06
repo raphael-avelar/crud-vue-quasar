@@ -12,7 +12,7 @@
       <router-view />
     </q-page-container>
 
-    <ModalConfirm ref="confirm"/>
+    <ModalConfirm ref="confirm" />
     <ModalUsersForm ref="usersForm" />
   </q-layout>
 </template>
