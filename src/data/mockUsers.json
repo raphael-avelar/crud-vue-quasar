@@ -1,0 +1,8 @@
+[
+  { "id": 1, "name": "Lucas Alves", "email": "lucas.alves@gmail.com", "tel": "(11) 98548-6585", "status": true },
+  { "id": 2, "name": "Pedro Soares", "email": "pedro.soares@hotmail.com", "tel": "(13) 98548-7542", "status": true },
+  { "id": 3, "name": "João Paulo", "email": "joao.paulo@outlook.com", "tel": "(31) 98788-4567", "status": false },
+  { "id": 4, "name": "Viviane Costa", "email": "viviane.costa@gmail.com", "tel": "(28) 99558-2345", "status": true },
+  { "id": 5, "name": "Esdras Ferreira", "email": "esdras.ferreira@gmail.com", "tel": "(11) 99588-3652", "status": false },
+  { "id": 6, "name": "Luana Silva", "email": "luana.silva@hotmail.com", "tel": "(34) 98288-6585", "status": true }
+]
