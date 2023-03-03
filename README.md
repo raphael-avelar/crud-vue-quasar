@@ -11,9 +11,8 @@ npm install
 
 ### Start the app in development mode (hot-code reloading, error reporting, etc.)
 ```bash
-quasar dev
+quasar dev | npm run dev (node version more then 16.19.1)
 ```
-
 
 ### Lint the files
 ```bash
