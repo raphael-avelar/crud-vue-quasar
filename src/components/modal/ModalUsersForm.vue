@@ -96,10 +96,12 @@ export default {
     },
 
     create () {
+      this.$q.loading.show()
       const payload = this.getPayload()
 
       axios.post('/api/users', payload).then(() => {
         this.$q.notify({ message: 'Usuário criado com sucesso!', color: 'positive' })
+        this.$q.loading.hide()
         this.conclude()
       }).catch(e => {
         this.$root.modal.confirm.show({ titulo: 'Atenção', message: e.response.data, erro: true })
@@ -108,10 +110,12 @@ export default {
     },
 
     edit () {
+      this.$q.loading.show()
       const payload = this.getPayload()
 
       axios.put(`/api/users/${payload.id}`, payload).then(() => {
         this.$q.notify({ message: 'Usuário editado com sucesso!', color: 'positive' })
+        this.$q.loading.hide()
         this.conclude()
       }).catch(e => {
         this.$root.modal.confirm.show({ titulo: 'Atenção', message: e.response.data, erro: true })

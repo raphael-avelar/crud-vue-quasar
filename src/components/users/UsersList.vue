@@ -58,7 +58,7 @@
                   size="11px"
                   color="red"
                   icon="delete"
-                  @click="deleteUser(props.row)"
+                  @click="confirmDeleteUser(props.row)"
                 >
                   <q-tooltip :offset="[7, 7]">Excluir</q-tooltip>
                 </q-btn>
@@ -99,8 +99,11 @@ export default {
 
   methods: {
     loadData () {
+      this.$q.loading.show()
+
       axios.get('/api/users').then(response => {
-        this.data = response.data
+        this.data = response.data.users
+        this.$q.loading.hide()
       })
     },
 
@@ -110,7 +113,7 @@ export default {
       })
     },
 
-    deleteUser (user) {
+    confirmDeleteUser (user) {
       const props = {
         titulo: 'Atenção',
         message: `Você tem certeza que deseja excluir o usuário (${user.name})?`,
@@ -118,13 +121,20 @@ export default {
       }
 
       this.$root.modal.confirm.show(props).then(() => {
-        axios.delete(`/api/users/${user.id}`).then(() => {
-          this.$q.notify({ message: 'Usuário excluído com sucesso!', color: 'positive' })
-          this.loadData()
-        }).catch(e => {
-          this.$root.modal.confirm.show({ titulo: 'Atenção', message: e.response.data, erro: true })
-          this.$q.loading.hide()
-        })
+        this.deleteUser(user)
+      })
+    },
+
+    deleteUser (user) {
+      this.$q.loading.show()
+
+      axios.delete(`/api/users/${user.id}`).then(() => {
+        this.$q.notify({ message: 'Usuário excluído com sucesso!', color: 'positive' })
+        this.$q.loading.hide()
+        this.loadData()
+      }).catch(e => {
+        this.$root.modal.confirm.show({ titulo: 'Atenção', message: e.response.data, erro: true })
+        this.$q.loading.hide()
       })
     }
   },
