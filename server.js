@@ -1,41 +1,47 @@
-import { createServer } from 'miragejs'
-
+import { createServer, Model } from 'miragejs'
 import mockUsersJSON from '@/data/mockUsers.json'
 
+const REQUEST_MS = 1000 // Simular carregamento
+
 createServer({
+  models: {
+    user: Model
+  },
+
+  seeds (server) {
+    server.db.loadData({
+      users: JSON.parse(JSON.stringify(mockUsersJSON))
+    })
+  },
+
   routes () {
     this.namespace = 'api'
 
     this.get('/users', () => {
-      if (!window.localStorage.getItem('users')) window.localStorage.setItem('users', JSON.stringify(mockUsersJSON))
+      return this.schema.all('user')
+    }, { timing: REQUEST_MS })
 
-      const mockUsers = JSON.parse(window.localStorage.getItem('users'))
-      return mockUsers
-    })
+    this.get('/users/:id', (schema, request) => {
+      const id = request.params.id
+      return schema.find('user', id)
+    }, { timing: REQUEST_MS })
 
     this.post('/users', (schema, request) => {
-      const attrs = JSON.parse(request.requestBody)
-      const users = JSON.parse(window.localStorage.getItem('users'))
-
-      users.push({ ...attrs })
-      window.localStorage.setItem('users', JSON.stringify(users))
-    })
+      const user = JSON.parse(request.requestBody)
+      return schema.create('user', user)
+    }, { timing: REQUEST_MS })
 
     this.put('/users/:id', (schema, request) => {
-      const attrs = JSON.parse(request.requestBody)
-      const id = parseInt(request.params.id)
-      let users = JSON.parse(window.localStorage.getItem('users'))
+      const id = request.params.id
+      const user = schema.find('user', id)
+      const requestBody = JSON.parse(request.requestBody)
 
-      users = users.map(user => user.id === id ? { ...attrs } : user)
-      window.localStorage.setItem('users', JSON.stringify(users))
-    })
+      return user.update(requestBody)
+    }, { timing: REQUEST_MS })
 
     this.delete('/users/:id', (schema, request) => {
-      const id = parseInt(request.params.id)
-      const users = JSON.parse(window.localStorage.getItem('users'))
-
-      users.splice(users.findIndex(user => user.id === id), 1)
-      window.localStorage.setItem('users', JSON.stringify(users))
-    })
+      const id = request.params.id
+      return schema.find('user', id).destroy()
+    }, { timing: REQUEST_MS })
   }
 })

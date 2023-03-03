@@ -11,7 +11,7 @@
 const ESLintPlugin = require('eslint-webpack-plugin')
 const path = require('path')
 
-module.exports = function (/* ctx */) {
+module.exports = function (ctx) {
   return {
     // https://v1.quasar.dev/quasar-cli/supporting-ts
     supportTS: false,
@@ -47,6 +47,7 @@ module.exports = function (/* ctx */) {
 
     // Full list of options: https://v1.quasar.dev/quasar-cli/quasar-conf-js#Property%3A-build
     build: {
+      env: ctx.dev ? require('./config/dev.env') : require('./config/prod.env'),
       vueRouterMode: 'hash', // available values: 'hash', 'history'
       extendWebpack (cfg) {
         cfg.resolve.alias = {
@@ -105,6 +106,7 @@ module.exports = function (/* ctx */) {
 
       // Quasar plugins
       plugins: [
+        'Loading',
         'Notify'
       ]
     },
